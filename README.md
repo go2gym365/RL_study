@@ -74,4 +74,4 @@ toward building robust and general-purpose control agents.
 Undergraduate Researcher (AI, NLP → RL)  
 Catholic University of Korea  
 GitHub: https://github.com/go2gym365  
-Email: *your_email_here*
+Email: go2gym365@gmail.com
