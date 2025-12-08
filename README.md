@@ -27,7 +27,7 @@ This repository will include:
 I am currently interested in the following research directions:
 
 
-### 🔹 **2. Model-Free Reinforcement Learning**
+### 🔹 **1. Model-Free Reinforcement Learning**
 - Scalable off-policy actor-critic methods (e.g., SAC, TD3)  
 - Representation learning for RL agents  
 - Efficient value-based or policy-based control  
