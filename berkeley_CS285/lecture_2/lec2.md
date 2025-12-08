@@ -8,7 +8,7 @@
 
 ---
 
-## 1. Big Picture (오늘 강의의 한 줄 요약)
+## 1. Big Picture (one-sentence summary of this lecture)
 - you cannot say this model do imitation well even thought you dicrease "per-step supervised loss" well.
 - higher quility of data make imitation learning work worse!
 
@@ -67,7 +67,7 @@ DAgger
 
 3. How the error probability will increase untill $T^2$
 
-### 6.2 What I found later (검색 / GPT / 책 보고 정리)
+### 6.2 What I found later (from web search, GPT, and books)
 1. lots of researchers and students of RL are usually confusing State and Observation.
 - In the theory or textbook, they assume a cercumstance of MDP. but in the research or experiment, we usually get a information of camera image, Lidar value .etc so those are observation because they aren't include all the information. They're actually POMDP. Also lot of code miscalled observation as a state. 
 - So we should not confuse about the concept between State and Observation
