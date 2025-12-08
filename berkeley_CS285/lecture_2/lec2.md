@@ -3,7 +3,7 @@
  ## 0. Meta
 - Course: CS285 RL
 - Date: 25.12.07
-- Lecturer: Lecture 2
+- Lecturer: Sergey Levine
 - Source/Link:  https://www.youtube.com/watch?v=awfrsjYnJmw&list=PL_iWQOsE6TfVYGEGiAOMaOzzv41Jfm_Ps&index=8&pp=iAQB
 
 ---
