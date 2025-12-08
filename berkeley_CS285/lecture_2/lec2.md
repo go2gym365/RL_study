@@ -16,9 +16,9 @@
 
 ## 2. Key Concepts
 <!-- 중요한 용어 / 개념 리스트업 (정확한 정의가 아니어도 됨, 나중에 수정 가능) -->
-$s_t$ = state
-$a_t$ = action
-$O$ = observation: collected from real world. It's not same as state in MDP situation
+- $s_t$ = state
+- $a_t$ = action
+- $O$ = observation: collected from real world. It's not same as state in MDP situation
 
 -  The distributional shift problem
     - Observation collected from so expectation of P_data(Ot) is that If there's no under or over fitting, we would expect that log distribution under the distribution of $P_data(O_t)$. So good action has a high probablity .
