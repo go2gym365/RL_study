@@ -49,7 +49,7 @@ DAgger
 
 ## 5. Examples from the Lecture
 <!-- 강의에서 든 예시, 직관, 비유, 데모 정리 -->
-![Figure 1] (img/figure1.png)
+![Figure 1](img/figure1.png)
 - Thogh per-step error is small as $\epsilon$, expected error amount can increase untill O($\epsilon T^2$)
   - probability of incorrect 1st step $\leq$ $\epsilon$: maximun cost: T
   - probability of incorrect 2nd step $\leq$ $(1-\epsilon)\epsilon$: maximun cost: T-1
