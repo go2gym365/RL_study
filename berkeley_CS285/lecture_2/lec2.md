@@ -27,14 +27,13 @@ $O$ = observation: collected from real world. It's not same as state in MDP situ
 ---
 
 ## 3. Important Equations / Diagrams
-<!-- 수식, 그림/도식 설명. 수식은 LaTeX로 적어두면 나중에 재사용하기 좋음 -->
-- Worst-case bound on total expected cost over horizon \(T\):
-  \[
-  \mathbb{E}\Big[\sum_{t=1}^T c(s_t, a_t)\Big] = O(\epsilon T^2)
-  \]
+- Worst-case bound on total expected cost over horizon $T$:
 
-(= per-step error는 \(\epsilon\) 으로 작아도, 전체 에피소드 에러는 \(T^2\)까지 커질 수 있다.)
+$$
+\mathbb{E}\Big[\sum_{t=1}^T c(s_t, a_t)\Big] = O(\epsilon T^2)
+$$
 
+(= per-step error는 $\epsilon$ 으로 작아도, 전체 에피소드 에러는 $T^2$까지 커질 수 있다.)
 
 ---
 
