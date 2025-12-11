@@ -15,9 +15,9 @@
 ## 2. Key Concepts
 <!-- 중요한 용어 / 개념 리스트업 (정확한 정의가 아니어도 됨, 나중에 수정 가능) -->
 - MC (Markov Chain): The process of changing state rely on the current state without agent's action
- - M = ${S, T}$
- - $S$: state space
- - $T$: transition operator -> They’re function/matrix, but actually they’re linear operator running above distribution. so they call as a transition operator
+  - M = ${S, T}$
+  - $S$: state space
+  - $T$: transition operator -> They’re function/matrix, but actually they’re linear operator running above distribution. so they call as a transition operator
 - MDP (Markov Dicision Process): The process of changing state and reward probabilistically according to agent's action
  - (S, A, T, r)
 - POMDP (Patially Observable MDP): Agent's have to do action only according to observation which has partial information instead of state which has fully information 
