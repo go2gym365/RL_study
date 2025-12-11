@@ -19,25 +19,25 @@
   - $S$: state space
   - $T$: transition operator -> They’re function/matrix, but actually they’re linear operator running above distribution. so they call as a transition operator
 - MDP (Markov Dicision Process): The process of changing state and reward probabilistically according to agent's action
- - (S, A, T, r)
+   - (S, A, T, r)
 - POMDP (Patially Observable MDP): Agent's have to do action only according to observation which has partial information instead of state which has fully information 
- - (S, A, O, T, E, r)
+   - (S, A, O, T, E, r)
 
 - $R(\tau) = \sum_{t=1}^T r(s_t, a_t)$
- - The cumulative rewards received during the episode
+   - The cumulative rewards received during the episode
 
 - $\pi_\theta(a \mid s)$
- - probability to do action $a$ at state $s$
+   - probability to do action $a$ at state $s$
 
 - $p_\theta(\tau)$
- - The probability distribution over trajectories induced by the policy
- - They call it distribution because even with the same policy $\theta$, a different trajactory $\tau$ comes out probabilistically each time
+   - The probability distribution over trajectories induced by the policy
+   - They call it distribution because even with the same policy $\theta$, a different trajactory $\tau$ comes out probabilistically each time
 
 - $Q^\pi(s_t, a_t) = \sum_{t' = t}^{T} \mathbb{E}_{\pi_\theta}\big[\, r(s_{t'}, a_{t'}) \mid s_t, a_t \,\big]$
- - The expected cumulative rewards when starting from the current (s, a) pair and following policy $\pi$ thereafter
+   - The expected cumulative rewards when starting from the current (s, a) pair and following policy $\pi$ thereafter
 
 - $V^\pi(s_t)= \sum_{t' = t}^{T}\mathbb{E}_{\pi_\theta}\big[\, r(s_{t'}, a_{t'}) \mid s_t \,\big]$
- - The expected cumulative reward when starting from current state $s_t$ and following policy $\pi$ thereafter. Leave celecting the action to policy $\pi$
+   - The expected cumulative reward when starting from current state $s_t$ and following policy $\pi$ thereafter. Leave celecting the action to policy $\pi$
 
 - On-policy vs Off-policy
   - On-policy: the algorithm must collect new samples whenever the policy changes (old samples become invalid).
