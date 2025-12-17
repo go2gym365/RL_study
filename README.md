@@ -26,13 +26,19 @@ This repository will include:
 
 I am currently interested in the following research directions:
 
-### 🔹 **1. World Models**
+### 🔹 **1. Model-Free Reinforcement Learning**
+- Scalable off-policy actor-critic methods (e.g., SAC, TD3)  
+- Representation learning for RL agents  
+- Efficient value-based or policy-based control  
+- Understanding generalization and stability in model-free RL
+
+### 🔹 **2. World Models**
 - Learning latent dynamics of environments  
 - Imagination-based rollouts and latent-space control  
 - Generative dynamics models such as Dreamer, World Model, TR2  
 - Using sequence models for temporal consistency and planning  
 
-### 🔹 **2. Action Planning**
+### 🔹 **3. Action Planning**
 - Vision-Language-Action models such as **RT-2**  
 - Transformer-based planners and trajectory modeling  
 - Long-horizon action generation  
