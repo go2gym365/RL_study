@@ -69,6 +69,8 @@ $$\nabla_{\theta'} J(\theta')
 \frac{1}{N}\sum_{i=1}^{N}\sum_{t=1}^{T}
 \Bigg(\frac{\pi_{\theta'}(a_{i,t}\mid s_{i,t})}{\pi_{\theta}(a_{i,t}\mid s_{i,t})}\Bigg)
 \nabla_{\theta'}\log \pi_{\theta'}(a_{i,t}\mid s_{i,t})\,\hat{Q}_{i,t}$$
+
+
 ---
 
 ## 4. Main Logic / Algorithm Steps
