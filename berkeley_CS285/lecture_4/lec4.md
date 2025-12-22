@@ -33,10 +33,10 @@
    - The probability distribution over trajectories induced by the policy
    - They call it distribution because even with the same policy $\theta$, a different trajactory $\tau$ comes out probabilistically each time
 
-- $Q^\pi(s_t, a_t)=\sum_{t' = t}^{T}\mathbb{E}_{\pi_\theta}\big[\, r(s_{t'}, a_{t'}) \mid s_t, a_t \,\big]$
+- $Q^\pi(s_t,a_t)=\sum_{t'=t}^{T}\mathbb{E}_{\pi_\theta}[r(s_{t'},a_{t'})\mid s_t,a_t]$
  - The expected cumulative rewards when starting from the current (s, a) pair and following policy $\pi$ thereafter
 
-- $V^\pi(s_t)=\sum_{t' = t}^{T}\mathbb{E}_{\pi_\theta}\big[\, r(s_{t'}, a_{t'}) \mid s_t \,\big]$
+- $V^\pi(s_t)=\sum_{t'=t}^{T}\mathbb{E}_{\pi_\theta}[r(s_{t'},a_{t'})\mid s_t]$
  - The expected cumulative reward when starting from current state $s_t$ and following policy $\pi$ thereafter. Leave celecting the action to policy $\pi$
 
 - On-policy vs Off-policy
