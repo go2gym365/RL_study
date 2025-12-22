@@ -18,18 +18,18 @@
 - Monte Carlo (MC) estimation
     - By taking the sample mean of multiple draws, we can do a MC estimation
 - Maximun Likelihood (ML) vs Policy Gradient (PG)
- - ML: Consider action of data $a$ as a correct answer and unconditionaly increase $\log \pi_\theta(a|s)$
- - PG: The sample action has no guarantee of a correct answer. Increasing probability of trajectory with big reward, reducing probability of trajectory with small reward.
+    - ML: Consider action of data $a$ as a correct answer and unconditionaly increase $\log \pi_\theta(a|s)$
+    - PG: The sample action has no guarantee of a correct answer. Increasing probability of trajectory with big reward, reducing probability of trajectory with small reward.
 - At the policy gradient, reducing variance is really important.
 -  Marcov property (MC property) vs Causality
- - MC property: The sate in the future is independent of the state in the past givent the present. And MC property is sometimes true somtimes not depending on your temporal porcess
- - Causality: The policy at time $^\prime$ cannot affect the reward at another time step $t$ if $t$ < $t^\prime$. And Causality is always true
+    - MC property: The sate in the future is independent of the state in the past givent the present. And MC property is sometimes true somtimes not depending on your temporal porcess
+    - Causality: The policy at time $t^\prime$ cannot affect the reward at another time step $t$ if $t$ < $t^\prime$. And Causality is always true
 ---
 
 ## 3. Important Equations / Diagrams
 <!-- 수식, 그림/도식 설명. 수식은 LaTeX로 적어두면 나중에 재사용하기 좋음 -->
 - $b^\*=\frac{\mathbb{E}[g(\tau)^2\,r(\tau)]}{\mathbb{E}[g(\tau)^2]}$
- - The optimal baseline is the expected reward re-weighted by gradient magnitudes for each parameter
+    - The optimal baseline is the expected reward re-weighted by gradient magnitudes for each parameter
 
 ---
 
