@@ -10,7 +10,7 @@
 <!-- 오늘 강의의 핵심 메시지/주제 한두 줄 -->
 - Policy gradient (=REINFORCE): It estimates from rollouts, increasing the probability of actions on high-reward trajectories and decreasing it on low-reward ones
 - But estimator has high variance so practical PG uses variance reduction
-- In continuous control, different parameters can affect the policy very differently like $\sigma$, $k$, so use natural policy gradient method to adjust scail with $F^{-1}$
+- In continuous control, different parameters can affect the policy very differently like $\sigma$, $k$, so use natural policy gradient method to adjust scale with $F^{-1}$
 
 ---
 
@@ -24,7 +24,7 @@
     - PG: The sample action has no guarantee of a correct answer. Increasing probability of trajectory with big reward, reducing probability of trajectory with small reward.
 - At the policy gradient, reducing variance is really important.
 - Markov property vs Causality
-    - Markov property property: The sate in the future is independent of the state in the past givent the present. And MC property is sometimes true somtimes not depending on your temporal porcess
+    - Markov property: The state in the future is independent of the state in the past given the present. And MC property is sometimes true sometimes not depending on your temporal process
     - Causality: The policy at time $t^\prime$ cannot affect the reward at another time step $t$ if $t$ < $t^\prime$. And Causality is always true
 
 - Natural Policy Gradient (Natural PG)
@@ -41,7 +41,7 @@
 2. Natural PG
     - The arrows converge nicely toward the optimum
     - Multiplying by $F^{-1}$ rescales/preconditions the gradient, so the step is measured in terms of "policy change" (distribution space) and ends up pointing in a more appropriate direction
-    - $F^{-1}$ is an estimate of the fischer information matrix
+    - $F$ is an estimate of the fischer information matrix, natural gradient uses $F^{-1}$
     - So final equation is $\theta \leftarrow \theta + \alpha F^{-1}\nabla_\theta J(\theta)$
 
 - Update
