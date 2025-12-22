@@ -8,7 +8,9 @@
 
 ## 1. Big Picture (one-sentence summary of this lecture)
 <!-- 오늘 강의의 핵심 메시지/주제 한두 줄 -->
-- 
+- Policy gradient (=REINFORCE): It estimates from rollouts, increasing the probability of actions on high-reward trajectories and decreasing it on low-reward ones
+- But estimator has high variance so practical PG uses variance reduction
+- In continuous control, different parameters can affect the policy very differently like $\sigma$, $k$, so use natural policy gradient method to adjust scail with $F_{-1}$
 
 ---
 
@@ -32,7 +34,7 @@
         - A small change in $\sigma$ can cause a large change in the policy (distribution), whereas the same-sized change in k may have a much smaller effect
         - poor conditioning in the lecture means gradient of derection $\sigma$ become too big. so updating focus on decreasing $\sigma$
 
-![Figure1](img/natural_dg.png)
+![Figure1](img/natural_gd.png)
 1. Vanilla GD
     - The arrows don't point cleanly toward the optimun
     - The $\sigma$ component dominates the gradient, so the updates get pulled into "just reducing the $\sigma$" rather than moving straight toward the best parameters
