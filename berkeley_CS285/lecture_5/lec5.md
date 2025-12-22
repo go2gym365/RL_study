@@ -10,21 +10,21 @@
 <!-- 오늘 강의의 핵심 메시지/주제 한두 줄 -->
 - Policy gradient (=REINFORCE): It estimates from rollouts, increasing the probability of actions on high-reward trajectories and decreasing it on low-reward ones
 - But estimator has high variance so practical PG uses variance reduction
-- In continuous control, different parameters can affect the policy very differently like $\sigma$, $k$, so use natural policy gradient method to adjust scail with $F_{-1}$
+- In continuous control, different parameters can affect the policy very differently like $\sigma$, $k$, so use natural policy gradient method to adjust scail with $F^{-1}$
 
 ---
 
 ## 2. Key Concepts
 <!-- 중요한 용어 / 개념 리스트업 (정확한 정의가 아니어도 됨, 나중에 수정 가능) -->
-- $P(\tau)$ = $P_\theta(\tau\)$
+- $P(\tau)$ = $P_\theta(\tau)$
 - Monte Carlo (MC) estimation
     - By taking the sample mean of multiple draws, we can do a MC estimation
 - Maximun Likelihood (ML) vs Policy Gradient (PG)
     - ML: Consider action of data $a$ as a correct answer and unconditionaly increase $\log \pi_\theta(a|s)$
     - PG: The sample action has no guarantee of a correct answer. Increasing probability of trajectory with big reward, reducing probability of trajectory with small reward.
 - At the policy gradient, reducing variance is really important.
--  Marcov property (MC property) vs Causality
-    - MC property: The sate in the future is independent of the state in the past givent the present. And MC property is sometimes true somtimes not depending on your temporal porcess
+- Markov property vs Causality
+    - Markov property property: The sate in the future is independent of the state in the past givent the present. And MC property is sometimes true somtimes not depending on your temporal porcess
     - Causality: The policy at time $t^\prime$ cannot affect the reward at another time step $t$ if $t$ < $t^\prime$. And Causality is always true
 
 - Natural Policy Gradient (Natural PG)
@@ -35,10 +35,10 @@
         - poor conditioning in the lecture means gradient of derection $\sigma$ become too big. so updating focus on decreasing $\sigma$
 
 ![Figure1](img/natural_GD.png)
-1. Vanilla GD
+1. Vanilla PG
     - The arrows don't point cleanly toward the optimun
     - The $\sigma$ component dominates the gradient, so the updates get pulled into "just reducing the $\sigma$" rather than moving straight toward the best parameters
-2. Natural GD
+2. Natural PG
     - The arrows converge nicely toward the optimum
     - Multiplying by $F^{-1}$ rescales/preconditions the gradient, so the step is measured in terms of "policy change" (distribution space) and ends up pointing in a more appropriate direction
     - $F^{-1}$ is an estimate of the fischer information matrix
@@ -64,13 +64,11 @@ $$\nabla_{\theta} J(\theta)
 \nabla_{\theta}\log \pi_{\theta}(a_{i,t}\mid s_{i,t})\,\hat{Q}_{i,t}$$
 
 - off-policy policy gradient
-$$\[
-\nabla_{\theta'} J(\theta')
+$$\nabla_{\theta'} J(\theta')
 \approx
 \frac{1}{N}\sum_{i=1}^{N}\sum_{t=1}^{T}
-\frac{\pi_{\theta'}(s_{i,t},a_{i,t})}{\pi_{\theta}(s_{i,t},a_{i,t})}\,
-\nabla_{\theta'}\log \pi_{\theta'}(a_{i,t}\mid s_{i,t})\,\hat{Q}_{i,t}
-\]$$
+\Bigg(\frac{\pi_{\theta'}(a_{i,t}\mid s_{i,t})}{\pi_{\theta}(a_{i,t}\mid s_{i,t})}\Bigg)
+\nabla_{\theta'}\log \pi_{\theta'}(a_{i,t}\mid s_{i,t})\,\hat{Q}_{i,t}$$
 ---
 
 ## 4. Main Logic / Algorithm Steps
