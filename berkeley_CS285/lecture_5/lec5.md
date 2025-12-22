@@ -28,10 +28,8 @@
 
 ## 3. Important Equations / Diagrams
 <!-- 수식, 그림/도식 설명. 수식은 LaTeX로 적어두면 나중에 재사용하기 좋음 -->
-- Equation:
-  - 
-- Notes:
-  - 
+- $b^\*=\frac{\mathbb{E}[g(\tau)^2\,r(\tau)]}{\mathbb{E}[g(\tau)^2]}$
+ - The optimal baseline is the expected reward re-weighted by gradient magnitudes for each parameter
 
 ---
 
