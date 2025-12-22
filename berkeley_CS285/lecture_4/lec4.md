@@ -36,12 +36,12 @@
 $$
 Q^\pi(s_t,a_t)=\sum_{t’=t}^{T}\mathbb{E}{\pi\theta}\big[,r(s_{t’},a_{t’})\mid s_t,a_t,\big]
 $$
-  - The expected cumulative rewards when starting from the current (s, a) pair and following policy $\pi$ thereafter
+    - The expected cumulative rewards when starting from the current (s, a) pair and following policy $\pi$ thereafter
 
 $$
 V^\pi(s_t)=\sum_{t’=t}^{T}\mathbb{E}{\pi\theta}\big[,r(s_{t’},a_{t’})\mid s_t,\big]
 $$
-  - The expected cumulative reward when starting from current state $s_t$ and following policy $\pi$ thereafter. Leave celecting the action to policy $\pi$
+    - The expected cumulative reward when starting from current state $s_t$ and following policy $\pi$ thereafter. Leave celecting the action to policy $\pi$
 
 - On-policy vs Off-policy
   - On-policy: the algorithm must collect new samples whenever the policy changes (old samples become invalid).
