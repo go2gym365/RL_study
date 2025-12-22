@@ -34,7 +34,7 @@
         - A small change in $\sigma$ can cause a large change in the policy (distribution), whereas the same-sized change in k may have a much smaller effect
         - poor conditioning in the lecture means gradient of derection $\sigma$ become too big. so updating focus on decreasing $\sigma$
 
-![Figure1](img/natural_gd.png)
+![Figure1](img/natural_GD.png)
 1. Vanilla GD
     - The arrows don't point cleanly toward the optimun
     - The $\sigma$ component dominates the gradient, so the updates get pulled into "just reducing the $\sigma$" rather than moving straight toward the best parameters
@@ -65,7 +65,6 @@ $$\nabla_{\theta} J(\theta)
 
 - off-policy policy gradient
 $$\[
-\textbf{off-policy policy gradient:}\quad
 \nabla_{\theta'} J(\theta')
 \approx
 \frac{1}{N}\sum_{i=1}^{N}\sum_{t=1}^{T}
