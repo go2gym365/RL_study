@@ -1,6 +1,6 @@
 ## 0. Meta
 - Course: CS 285, Reinforcement Learning
-- Date: 2025.12.
+- Date: 2025.12.26
 - Lecturer: Sergey Levine
 - Source/Link: https://www.youtube.com/watch?v=wr00ef_TY6Q&list=PL_iWQOsE6TfVYGEGiAOMaOzzv41Jfm_Ps&index=21
 
@@ -8,7 +8,8 @@
 
 ## 1. Big Picture (one-sentence summary of this lecture)
 <!-- 오늘 강의의 핵심 메시지/주제 한두 줄 -->
-- 
+- This lecture connects policy gradients to value functions, showing how actor-critic methods use a learned critic as a baseline or TD advantage to reduce variance. 
+- And how practical designs introduce and manage bias-variance trade off
 
 ---
 
@@ -16,17 +17,54 @@
 <!-- 중요한 용어 / 개념 리스트업 (정확한 정의가 아니어도 됨, 나중에 수정 가능) -->
 - **$\hat{Q_{i,t}}_t$**: It estimates of expected reward if we take action $a_{i,t}$ in state $s_{i,t}$
     - It made by a single rollout so it would have big variance
+- **Discount factor ($\gamma$):** Better to get rewards sooner than later. Usually set the discount factor 0.99~0.999
 
+- **Baseline($b$):** Subtract mean expected value from the reward which agent got ($G_t$, Reward-to-go)
+    - It usually use Value Function ($V(s)$) which the everage of reward to get at the state $s$
+    - If all the rewards from my actions have positive (+) value, if there's no baseline, algorithm might think "all the actions are good. increase all the probablity". eventhought some action is better than others, also some action is worse than others. So speed of finding a optimal policy will be really slow and gradient might not be stable
+    - Judge good or not comparing with everage
 
+- **Actor-Critic algorithm**
+    - What Actor and Critic do?
+        - Actor: It's policy ($\pi_\theta(a|s)$). It decides which action will we do?
+        - Critic: It's value function $\hat{V}_\phi(s)$. Scoring doing the action was good or not after watching the action which Actor did.
+    - Equation of advantage in this algorithm is $r + \gamma \hat V(s') - \hat V(s)$. This equation is TD Error. 
+        - $r + \gamma \hat V(s')$: This equation is TD Traget. The sum of immediate reward $r$ at the state $s$ and discounted expected future value ($\gamma V^(s′)$) from the next state. iIt represents the estimate of the actual outcome 
+        - $\hat V(s)$: This equation is Baseline. Before doing action, expected everage value which I will get at the state $s$
+        - Due to use TD Error, you can estimate Q-value even go 1 step and decrease variance because of you don't need to sum reward of whole episode.
+
+- **Replay Buffer:** 
+    - Limitation of online 1-sample update
+        - Online 1-sample update method calculates gradient with only 1 sample. So there's too big noise and high variance. Also data getting sequensly is quite similar each others. So they're making the model biased
+    - Using Replay Buffer
+        - Stacking the reward getting after doi action following the previous policy at the bufferand when they train, randomly pick batch and update Actor and Critic through the SGD
+        - Result of using Replay buffer, correlations between data are broken because of using randomly mixed data
+    - Off-policy ploblem appear
+        - Thanks to buffer, training is stable but we cannot evaluate how much the action when I did at the past is good. Because that action made by past policy not current policy.
+    - Change $V$ to $Q$
+        - Change the shape of the critic to total expected reward $Q$ from everage $V$. 
+        - $V$ just represent the average value of actions under the current policy, whereas $Q$ can evaluate any specific action regardless of the current policy's preference
+
+- **Eligibility traces vs n-step return**
+![Figure2](img/TD_MC.png)
+    - MC advantage
+        - Lower biased 
+        - Higher variance because full traectory
+    - Critic (1-step TD) advantage
+        - Low variance
+        - Can be biased if $\hat V$ is inaccurate
+    - So they mix tegether to trade off bias and variance!
+        - n-step return: Use real rewards for thr first $n$ step, and bootstrap with $\gamma^n \hat V(s_{t+n})$
+        - this keeps the target more realistic than 1-step TD while prevent variance from exploding like MC
 
 ---
 
 ## 3. Important Equations / Diagrams
 <!-- 수식, 그림/도식 설명. 수식은 LaTeX로 적어두면 나중에 재사용하기 좋음 -->
 - Value function
-    - $V^\pi(s_t)$: The total expected reward from $s_t$ when you following policy $\pi$ thereafter
-    - $Q^\pi(s_t,a_t)$: The total xpected reward from taking $a_t$ in $s_t$ when you following policy $\pi$ thereafter
-    - $A^\pi(s_t,a_t)$: How much better $a_t$ is as compared to the average performance of your policy pi in state $s_t$
+    - State-Value Function $V^\pi(s_t)$: The total expected reward from $s_t$ when you following policy $\pi$ thereafter
+    - Action-Value Function $Q^\pi(s_t,a_t)$: The total expected reward from taking $a_t$ in $s_t$ when you  following policy $\pi$ thereafter
+    - Advantage Function $A^\pi(s_t,a_t)$: How much better $a_t$ is as compared to the average performance of your policy pi in state $s_t$
 
 ---
 
@@ -42,15 +80,23 @@
     - TD evaluation
         - pros: Lower variance. Because it uses the current reward plus the value of the next state
         - cons: It can have higher biase if $\hat V^\pi$ Is incorrect
-
 ---
 
 ## 5. Examples from the Lecture
 <!-- 강의에서 든 예시, 직관, 비유, 데모 정리 -->
-- Example 1:
-- Example 2:
-- Intuition: 
-
+![Figure1](img/C_A_algorithm.png)
+- option 2
+    - It assume that future's decision is less important than current one.
+    - So it discountes both return and timestep contribution.
+- option 1
+    - The size of update is same for every timesteps. So discount only reward
+    - Future rewards are discounting from the timestep $t$
+- Conclusion
+    - They use $\gamma$ to prevent values from diverging in the infinite horizon
+    - When the $t$ increase, future policy almost cannot get update because of $\gamma^{t-1}$ is keep smaller
+    - So we typically use Option 1! Because we want to judge action $t$ using the result after time $t$. And it's same of $Q(s_t,a_t)$.
+    - Also option 1 tends to be more stable and faster in training
+    - Online 1-sample updates are too unstable for Deep RL. sSo they's why we apply batches via Replay Buffer or Parallel workers!
 ---
 
 ## 6. My Confusions & Clarifications
@@ -62,24 +108,3 @@
 - 
 
 ---
-
-## 7. Connections
-<!-- 이 강의 내용이랑 연결되는 것들: 이전 강의, 다른 과목, 내 연구/프로젝트 등 -->
-- Relation to previous lectures:
-- Relation to my projects/research:
-- Real-world / paper connections:
-
----
-
-## 8. Keywords to Search Later
-<!-- 더 깊게 보고 싶은 키워드, 논문 키워드, 용어 -->
-- 
-- 
-
----
-
-## 9. Action Items / TODO
-<!-- 다음에 할 것들 체크리스트 -->
-- [ ] 슬라이드 다시 보기 (시간: )
-- [ ] 과제/코드에 이 개념 적용해보기
-- [ ] 관련 논문/블로그 하나 찾아 읽기: 
