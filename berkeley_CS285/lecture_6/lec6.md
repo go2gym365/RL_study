@@ -28,6 +28,7 @@
     - What Actor and Critic do?
         - Actor: It's policy ($\pi_\theta(a|s)$). It decides which action will we do?
         - Critic: It's value function $\hat{V}_\phi(s)$. Scoring doing the action was good or not after watching the action which Actor did.
+        - Reduce variance of policy gradient
     - Equation of advantage in this algorithm is $r + \gamma \hat V(s') - \hat V(s)$. This equation is TD Error. 
         - $r + \gamma \hat V(s')$: This equation is TD Traget. The sum of immediate reward $r$ at the state $s$ and discounted expected future value ($\gamma V^(s′)$) from the next state. iIt represents the estimate of the actual outcome 
         - $\hat V(s)$: This equation is Baseline. Before doing action, expected everage value which I will get at the state $s$
