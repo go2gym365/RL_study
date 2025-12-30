@@ -9,7 +9,7 @@
 ---
 
 ## 1. Big Picture (one-sentence summary of this lecture)
-- you cannot say this model do imitation well even thought you dicrease "per-step supervised loss" well.
+- Even if the per-step supervised loss is small, imitation can fail due to compounding errors under distribution shift.
 - higher quility of data make imitation learning work worse!
 
 ---
@@ -67,13 +67,13 @@ DAgger
 
 3. How the error probability will increase untill $T^2$
 
-### 6.2 What I found later (from web search, GPT, and books)
+### 6.2 What I found later
 1. lots of researchers and students of RL are usually confusing State and Observation.
 - In the theory or textbook, they assume a cercumstance of MDP. but in the research or experiment, we usually get a information of camera image, Lidar value .etc so those are observation because they aren't include all the information. They're actually POMDP. Also lot of code miscalled observation as a state. 
 - So we should not confuse about the concept between State and Observation
 
 2. Behavioral cloning
- -> Behavioral cloning is the moethod to fit 전문가 행동 using state by supervised-learning. But in the RL, Data is not IID so if there's a tiny ploblems, it will become compounding error and explode (the probability to make a big ploblem will be increase!)
+ -> Behavioral cloning is the moethod to fit 전문가 행동 using state by supervised-learning. Even small classification errors can lead the policy to unseen states, causing distribution shift and compounding errors.
 - so collect a data smartly!
     - use very powerful model
     - make little wrng data to collect daggerish data 
