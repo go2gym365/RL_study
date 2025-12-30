@@ -111,7 +111,7 @@
 - What is the Tabular
 - Why we can't compute the expectation exactly from samples
 
-### 6.2 What I found later (from web search, GPT, and books)
+### 6.2 What I found later
 - why we need model when we update $V(s)$
   - 정확한 가치 $V(s)$를 구하려면 모든 가능성에 대한 가치의 평균(기댓값)을 내야하는데, 이때 각 상태로 갈 확률이 얼마인지 모르면 평균을 계산할 수 없음
   - 하나의 상태 s에서 나올 수 있는 행동 중 어떤 행동이 제일 좋은지 알기 위해서는 모든 행동을 다 고려해봐야 함. 모델이 있으면 시뮬레이션을 돌려보고 최댓값을 고를 수 있지만 모델이 없다면 시간을 돌려가며 동일한 상태에서 행동들을 다 해볼 수 없기 때문에 Max 계산을 할 수 없음
