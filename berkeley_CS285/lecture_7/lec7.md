@@ -65,11 +65,14 @@
     Iterate these 3 steps!
 
 - Online Q-iteration algorithm (Q-learning)
-  - Equation:
-    1. Action 1 time and observe 1 trasition: $(s_i,a_i,s'_i,r_i)$
-    2. Calculate 1 target for 1 time of trasition: $y_i = r(s_i,a_i)+\gamma\max_{a'}Q_\phi(s'_i,a')$
-    3. 1 step update for SGD: $\phi \leftarrow \phi - \alpha \,\nabla_\phi Q_\phi(s_i,a_i)\,\big(Q_\phi(s_i,a_i)-y_i\big)$
-    We call $Q_\phi(s_i,a_i)-y_i\big$ equatino as a TD Error
+  - Equations:
+    1. Take one action and observe one transition: $(s_i, a_i, s'_i, r_i)$
+    2. Compute the target for this transition:
+       $$y_i = r(s_i, a_i) + \gamma \max_{a'} Q_\phi(s'_i, a')$$
+    3. One SGD update step:
+       $$\phi \leftarrow \phi - \alpha \, \nabla_\phi Q_\phi(s_i, a_i)\, \big(Q_\phi(s_i, a_i) - y_i\big)$$
+    - TD error:
+      $$\delta_i = y_i - Q_\phi(s_i, a_i)$$
 
 
 ---
@@ -115,13 +118,14 @@
   - **Conclusion:** V(s)는 스테이트에 대해 액션을 선택해야하지만 Q(s,a)는 상태 s에서 행동 a를 했더니 나온 결과가 나와있기 때문에 결과만 보고 업데이트 하면 된다. 
 
 - What is the infinity norm?
-  - The absolute value of the biggest element of vector (The coordinate that differs the most from the difference between two vectors)
-  - $∥V−\bar V∥∞​=smax​∣V(s)−\bar V(s)∣$
-    - Focus on the biggest error of all the states
-    - It estimate the worst case error
-  - $∥BV−BVˉ∥∞​≤γ∥V−Vˉ∥∞​$ w
-    - This equation is used in value iteration
-    - Do Bellman update B once, the worse errer decrease $\gamma$ times. So If you iterae error will go zero so we can show diverge
+  - The infinity norm (max norm) of a vector is the absolute value of its largest entry.
+  - For the difference between two value functions:
+    $$\|V - \bar V\|_\infty = \max_{s} |V(s) - \bar V(s)|$$
+    - It focuses on the *largest* error over all states (worst-case error).
+  - Bellman optimality operator is a contraction in the infinity norm:
+    $$\|\mathcal{B}V - \mathcal{B}\bar V\|_\infty \le \gamma \, \|V - \bar V\|_\infty$$
+    - This implies each Bellman update shrinks the worst-case error by at least a factor of $\gamma$.
+    - Therefore, repeatedly applying $\mathcal{B}$ makes $V$ converge to the unique fixed point $V^*$ (in the tabular case).
 
 - What is the Tabular
   - The way how save action or state-action pair as a table. If there is states of $N$, $V$ is a vector length of $N$
