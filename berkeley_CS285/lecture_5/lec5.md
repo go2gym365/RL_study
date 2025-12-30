@@ -90,7 +90,7 @@ $$\nabla_{\theta'} J(\theta')
 - When derivating probability, why they change probability to log probability
 - How $F^{-1}$ can do scailing?
 
-### 5.2 What I found later (from web search, GPT, and books)
+### 5.2 What I found later
 - When estimating the expectation($J(\theta)$), theusing sample mean can have high variance. Is it fine to use the sample avarage?
     - Estimating means unbiased+LLN (Law of large number)
     - The estimating which we use is $\hat J(\theta)=\frac{1}{N}\sum_{i=1}^N R(\tau_i)$. htis estimation is unbiased so everagly correct the answer.

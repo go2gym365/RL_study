@@ -101,7 +101,7 @@ $$
 
 - 2. The difference between Q-func and V-func is only a, is it big difference??
 
-### 6.2 What I found later (from web search, GPT, and books)
+### 6.2 What I found later
 1. $p_\theta(\tau)$
  - They call it distribution bc even with the same policy $\theta$, a different trajectory $\tau$ comes out probabilistically each time
  - So taking the expecation implies averaging over all possivble trajectories under the policy, rather than considering a single episode
