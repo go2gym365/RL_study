@@ -8,7 +8,7 @@
 
 ## 1. Big Picture (one-sentence summary of this lecture)
 <!-- 오늘 강의의 핵심 메시지/주제 한두 줄 -->
-- This lecture motivated from Isn't it fine to know only value function well. 
+- This lecture is motivated by the question: Is it enough to learn only a value/Q function, without explicitly learning a policy?
 
 - Even without directly learning a policy, if we learn the Q-function well, we can derive actions via $\arg\max$. However, in real environments, we typically cannot rely on a known model, compute expectations exactly, or use tabular representations. Therefore, we use samples and function approximation to regress onto Bellman backup targets (e.g., Fitted Q-Iteration and Q-learning), but then convergence is not theoretically guaranteed.
 <!--정책 경사 없이 가치만 쓰자 → 모델 기반이면 Bellman optimality backup으로 Q-iteration 가능 → 실제 환경에서는 전이확률을 모르니 샘플로 backup을 근사해야함 → Q-iteration → 실제 환경에서는 state 수가 너무 많아 (고차원이라) tabular 불가능함 특히 continuous한 환경에서는 안됨. 그러니 target을 함수 근사로 회귀해서 맞춰보자 → Fitted Q-iteration  → 배치로 여러 샘플을 모으지 말고 전이 1개를 온라인으로 한스텝씩 끊어서 업데이트 하자 (Q-learning)-->
@@ -19,37 +19,37 @@
 ## 2. Key Concepts
 <!-- 중요한 용어 / 개념 리스트업 (정확한 정의가 아니어도 됨, 나중에 수정 가능) -->
 - **Environment Model (=Transition Dynamics)** 
-  - It represents the porbability of trasitioning to the next state $s'$ give that the agent takes action $a$ in the current state $s$
+  - It represents the probability of trasitioning to the next state $s'$ give that the agent takes action $a$ in the current state $s$
   - $P(s' | s, a)$
 - **off-policy vs on-policy**
   - on-policy: The policy($\pi$) currently being improved must be identical to the policy actually collecting data in the environment (e.g. Policy gradient, SARSA)
-  - off-policy: The policy for collecting data (behavior policy) and the policy currently being trained/improved (Traget policy) can be different. this allows for high data efficiency, as past data or data from others can be reused.
+  - off-policy: The policy for collecting data (behavior policy) and the policy currently being trained/improved (Target policy) can be different. this allows for high data efficiency, as past data or data from others can be reused.
 - **online algorithm** 
   - Update often when the new trasition comes
   - The circumstance comes like a shape of data stream so it's natural
-  - Apply easily with memeory efficient and calculate lightly
+  - Apply easily with memory efficient and calculate lightly
 - **Bellman optimality**
   - Definition: Self-consistency condition that the optimal value function must satisfy "If you act optimally, then the value of a state or state-action pair equals the immediate reward plus the discounted optimal value of the next state"
   - Equations
     - Optimal state value $V^*$:$V^*(s)=\max_a \Big[r(s,a)+\gamma \,\mathbb{E}_{s'\sim p(\cdot|s,a)}[V^*(s')]\Big]$
     - Optimal state value $Q^*$: $Q^*(s,a)=r(s,a)+\gamma \,\mathbb{E}_{s'\sim p(\cdot|s,a)}\Big[\max_{a'} Q^*(s',a')\Big]$
 - **Fitted Q-Iteration (FQI)** 
-  - FQI is value-based RL method that approximates the action-value function with a neural network $Q_\phi(s,a)$ and trains it by regressing to Bellman optimality tragets
+  - FQI is value-based RL method that approximates the action-value function with a neural network $Q_\phi(s,a)$ and trains it by regressing to Bellman optimality targets
   - Make taget $y=r+\gamma\max_{a'}Q(s',a')$ using data ($s, a, s', r$) and minimize MSE to make $Q(s,a)\approx y$
   - As $Q_\phi$ gets closer to the Bellman-optimal fixed point ($Q^*$), the greedy policy improves
   - Why FQI is off-policy?
-    - Policy only evaluated by target of $\max_{a'}Q(s',a')$, eventhought the data not comes from current policy, you can derive the greedy policy!
+    - Policy only evaluated by target of $\max_{a'}Q(s',a')$, even though the data not comes from current policy, you can derive the greedy policy!
     - So data efficiency is higher because you can reuse sample 
 - **Non-tabular value function learning (Q-learning)**
   - Value iteration is the sequence of "Making a Q table - Update $V$ from max value of each state". Bellman operator $B$ is the process of this iteration. We can represent this process as a equation of $V_{k+1}​=BV_k$
-  - $B$ converges to $V^*$ because it's contraction at the ∞-norm.
-    - $V^*$ is a value function of optimal policy. and $V$ is fixed point of $B$
-    - Contraction is charicteristic of decreasing a length (difference) like $\|\mathcal{B}V - \mathcal{B}\bar V\| \le \gamma \|V-\bar V\|$ for random vactor $V, \bar V$. In this equation $\gamma\in(0,1)$ so garrented to be convergence.
+  - Because $\mathcal{B}$ is a contraction in $\|\cdot\|_\infty$, repeated application $V_{k+1}=\mathcal{B}V_k$ converges to the unique fixed point $V^*$ (tabular case)
+    - $V^*$ is a value function of optimal policy. and $V^*$ is the unique fixed point of $B$
+    - Contraction is characteristic of decreasing a length (difference) like $\|\mathcal{B}V - \mathcal{B}\bar V\| \le \gamma \|V-\bar V\|$ for random vector $V, \bar V$. In this equation $\gamma\in(0,1)$ so guaranteed to be convergence.
   - $\Pi$ (Projection operator): The process of estimation to neural network. It's a contraction at L2-norm
-- **epslion-greedy**
+- **epsilon-greedy**
   - Select greedy action as a probability of 1-$\epsilon$, select random action as a probability of $\epsilon$
   - If the $\epsilon$ is small, less exploration and more exploitation. So current Q select action which consider as a optimal action.
-  - If the $\epsilon$ is large, more exploration and less exploitation. So current Q do randomly diverse action but less probability to select greedy action short-term preformance can be decrease!
+  - If the $\epsilon$ is large, more exploration and less exploitation. So current Q do randomly diverse action but less probability to select greedy action short-term performance can be decrease!
   - So usually use epsilon decay which use large $\epsilon$ at the initial of training and decrease epsilon gradually!
   
 ---
@@ -82,7 +82,7 @@
 - **Policy iteration**
 ![Figure1](img/policy_iteration.png)
   1. Policy evaluation: Getting $V^\pi$ or $Q^\pi$ of current policy $\pi$ to calculate Advantage
-  2. Policy imrovement: Literily improve the policy using $\pi'(s) = \arg\max_a A^\pi(s,a)$ equation. Prof said that if the discrete action, argmax is easy
+  2. Policy improvement: Literally improve the policy using $\pi'(s) = \arg\max_a A^\pi(s,a)$ equation. Prof said that if the discrete action, argmax is easy
 
 - **The overall flow**
 1. Omit Policy Gradients: Move from an explicit policy network to an implicit greedy policy by taking $\arg\max$ over an advantage / Q-value.
@@ -96,7 +96,7 @@
 
 ## 5. Examples from the Lecture
 <!-- 강의에서 든 예시, 직관, 비유, 데모 정리 -->
-- **Q-learing cycle**
+- **Q-learning cycle**
 ![Figure3](img/q_leanring.png)
 1. Generate samples: $(s_i,a_i,s'_i,r_i)$
 2. Fit a model to estimate return: $Q_\phi(s,a) \leftarrow r(s,a) + \gamma \max_{a'} Q_\phi(s',a')$
