@@ -8,7 +8,7 @@
 
 ## 1. Big Picture (one-sentence summary of this lecture)
 <!-- 오늘 강의의 핵심 메시지/주제 한두 줄 -->
-- 
+- This lecture introduces practical optimization techniques, such as Replay Buffers and Target Networks, to mitigate the instabilities that arise when applying value-based methods to deep reinforcement learning
 
 ---
 
@@ -19,7 +19,6 @@
     - At the Online Q-learning, $s_t, s_{t+1}, ...$ are continous state and connected each other. So they are not Independent and distribution is keep changing. That's why IID asumption is destory on online Q-learning
 - **SGD (Stochastic Gradient Descent)**
     - Instead of computing the gradient on the entire data set, we use a method to approximate and update it using a subset (or even just one) of the sample
-    - 
 - **Replay buffer** 
 ![Figure1](img/qlearning_replaybuffer.png)
     - If the function approximator had seen all transitions at once, it might have fit them well. But instead, it only ever sees a small, highly correlated window, which gives it just enough time to overfit and not enough context to generalize
@@ -28,23 +27,54 @@
         2. Sample a batch $(s, a, s', r)$ from $B$
         3. Compute target value for each transition and Q-function update by batch per batch so that we can get lower variance
         - We can repeat step2, 3 K times but if the K is larger it will be more efficient. Or If the K is 1 and collect many datas that's the classic Deep Q-learning
+    - 리플라이버퍼에서는 버퍼 크기가 한정되어있어서 주기적으로 제거하는 방법도 있음 -> 링 버퍼로 전환. 
 
 - **Polyak averaging**
     - uneven lag problem: When the target network is copied all at once at fixed intervals, he amount of lag vsries significantly. Right after an update, the lag is very small, while just before the next update, the lag can become vary large, which may make training unstable.
     - Soft update (Polyak Averaging): To solve htis issue, Polyak averaging updates the target network slightly and smoothly at every step
     - equation: $\phi' \leftarrow \tau \phi' + (1 - \tau)\phi$
-    - In this equation we usualy use large value of $\tau$ like 0.999 to make target network update current network really slowly and stable
-- **Term 3** – 
+    - In this equation we usualy use large value하도 of $\tau$ like 0.999 to make target network update current network really slowly and stable
+- Overestimation problem in Q-learning
+    - In the TD target ($y = r + \gamma \max_{a'} Q_{\phi'}(s',a')$), max choice the large noise value because max usually choice coincidently positive noise.
+    - So overestimation problem cause because of action and value are from the same policy $Q_{\phi'}$
+- **Double Q-learning**
+    - Overestimation problem is from  choicing action and evaluation the value of action using same network
+    - So they suggest the choicing the action using single network but evaluating a value of the action using different network
+        - 선택: $\arg\max_{a'} Q_{\phi}(s',a')$
+        - 평가: $Q_{\phi'}(s', \arg\max_{a'} Q_{\phi}(s',a'))$
+- **Multi-step returns**
+    - Early in training, the Q-function is very bad / essentially random, so the learning signal mostly comes from the reward $r$, and the bootstrap term can act like noise
+    - Instead of a 1-step backup $\;r_t + \gamma \max_{a'} Q(s_{t+1}, a')$, using an n-step return sums multiple real rewards and can speed up learning early on.
+    - Works best when the data is mostly on-policy (and the action space is small), because intermediate actions in the n-step trajectory should match what the current policy would do.
+    - N-step return은 on-policy이기 대문에 off-policy로 만드는 방법에 대해 생각해 봐야함.
+- The problem in the continous space
+    - In continuous action spaces, the hard part is the $\arg\max / \max$ over actions
+    - sol.1: stochastic optimization
+        - Random sampling: sample N candidate actions , evaluate $Q(s,a)$ for each, and take the best one. Simple + parallelizable, but becomes inaccurate as action dimension grows
+        - CEM (Cross-entropy method): repeatedly sample actions, then refine the sampling distribution toward regions that produced high Q-values, and repeat (fast if you can parallelize and actions are low-dim)
+        - CMA-ES: More sophisticated stochastic optimizer (like a fancier CEM); works reasonably well up to ~40D action spaces
+    - sol.2: Use function class that is easy to optimize
+        - NAF (Normalized Advantage Function) structure: design Q so that, for a fixed state, it is quadratic in the action.
+    - sol.3: Learn an approximate maximizer
+        - DDPG
+            - design Q so that, for a fixed state, it is quadratic in the action.
+            train another network \mu_\theta(s) so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $y_j = r_j + \gamma Q_{\phi'}\!\big(s'_j, \mu_{\theta'}(s'_j)\big)$,
 
 ---
 
 ## 3. Important Equations / Diagrams
 <!-- 수식, 그림/도식 설명. 수식은 LaTeX로 적어두면 나중에 재사용하기 좋음 -->
-- Equation:
-  - 
-- Notes:
-  - 
+- N-step returns
+$$y_{j,t}
+=
+\sum_{t'=t}^{t+N-1} \gamma^{\,t'-t}\, r_{j,t'}
+\;+\;
+\gamma^N \max_{a_{j,t+N}} Q_{\phi'}\!\left(s_{j,t+N}, a_{j,t+N}\right)$$
 
+1. 앞으로 N스텝 동안 실제로 받은 보상들을 discount 해서 더함
+$$\sum_{t'=t}^{t+N-1} \gamma^{\,t'-t}\, r_{j,t'}$$
+2. N스텝 뒤 상태에서의 남은 미래를 타깃 네트워크로 부트스트랩
+$$+\ \gamma^N \max_{a} Q_{\phi'}(s_{t+N}, a)$$
 ---
 
 ## 4. Main Logic / Algorithm Steps
@@ -65,25 +95,21 @@
         4. Update current network: Update the current network paremetes $\phi$ to minimize the error between $Q_\phi$ and the previously caculated target $y_j$
         5. Copy target Network: Every N steps, copy the current parameters $\phi$ to the target network $\phi'$. This stabilizes training by resolbing the moving target proble
 
-        
-
+- DDPG
+![Figure3](img/DDPG.png)
+1. Data collection and buffer storage: The agent takes an action a_i in the environment, observes the resulting transition $(s_i, a_i, s'_i, r_i)$, and stores this transition in the replay buffer $B$
+2. Mini-batch sampling: A mini-batch of transitions $(s_j, a_j, s'_j, r_j)$ is sampled uniformly at random from the replay buffer $B$
+3. Target value calculation: For each sampled transition, the target value is computed using the target networks: $y_j = r_j + \gamma Q_{\phi'}\bigl(s'_j, \mu_{\theta'}(s'_j)\bigr)$. Here, $Q_{\phi'}$ is the target Q-network and $\mu_{\theta'}$ is the target policy network. Using separate target networks helps mitigate the moving target problem and improves training stability
+4. Update critic: Perform a gradient update on the parameters $\phi$ of the current Q-network (the critic) by minimizing the error between the predicted Q-value and the target $y_j$
+5. Update actor: The parameters $\theta$ of the policy network (actor) are updated to maximize the Q-value
 ---
 
-## 5. Examples from the Lecture
-<!-- 강의에서 든 예시, 직관, 비유, 데모 정리 -->
-- Example 1:
-- Example 2:
-- Intuition: 
-
----
-
-## 6. My Confusions & Clarifications
+## 5. My Confusions & Clarifications
 <!-- 강의 들을 때 헷갈린 것들 + 나중에 찾아보고 이해한 내용 -->
-### 6.1 What I didn’t understand (at first)
-- Q-learning에서 업데이트 식이 왜 Gradient descent처럼 보이지만 진짜 gradient descent가 아닌지
+### 5.1 What I didn’t understand (at first)
+- Why the Q-learning update rule resembles gradient descent but is not actually true gradient descent
 
-### 6.2 What I found later
-- Q-learning에서 업데이트 식이 왜 Gradient descent처럼 보이지만 진짜 gradient descent가 아닌지
-    - 업데이트 식 $y_i = r_i + \gamma \max_{a'} Q_\phi(s', a')$을 보면 $Q_\phi$가 들어있음. 하지만 실제 업데이트에서는 traget 쪽의 Q에는 gradient를 계산을 안하기 때문에 체인룰을 깨버린다. 
-
----
+### 5.2 What I found later
+- Why the Q-learning update rule resembles gradient descent but is not actually true gradient descent
+    - In the target definition $y_i = r_i + \gamma \max_{a'} Q_\phi(s'_i, a')$ the Q-function Q_\phi itself appears inside the target. However, during the actual update, gradients are not backpropagated through the Q-function used in the target term. 
+    - As a result, the chain rule is broken, and the update is not the gradient of any well-defined objective function.
