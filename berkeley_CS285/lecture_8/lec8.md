@@ -58,7 +58,7 @@
     - sol.3: Learn an approximate maximizer
         - DDPG
             - design $Q$ so that, for a fixed state, it is quadratic in the action.
-            train another network $\mu_\theta(s)$ so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $$y_j = r_j + \gamma Q_{\phi'}\!\big(s'_j, \mu_{\theta'}(s'_j)\big)$$,
+            train another network $\mu_\theta(s)$ so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $$y_j = r_j + \gamma Q_{\phi'}\big(s'_j, \mu_{\theta'}(s'_j)\big)$$
 
 ---
 
