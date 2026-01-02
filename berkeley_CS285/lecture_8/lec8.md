@@ -46,7 +46,7 @@
     - Early in training, the Q-function is very bad / essentially random, so the learning signal mostly comes from the reward $r$, and the bootstrap term can act like noise
     - Instead of a 1-step backup $\;r_t + \gamma \max_{a'} Q(s_{t+1}, a')$, using an n-step return sums multiple real rewards and can speed up learning early on.
     - Works best when the data is mostly on-policy (and the action space is small), because intermediate actions in the n-step trajectory should match what the current policy would do.
-    - N-step return은 on-policy이기 대문에 off-policy로 만드는 방법에 대해 생각해 봐야함.
+    - N-step return은 on-policy이기 때문에 off-policy로 만드는 방법에 대해 생각해 봐야함.
 - The problem in the continous space
     - In continuous action spaces, the hard part is the $\arg\max / \max$ over actions
     - sol.1: stochastic optimization
@@ -58,7 +58,7 @@
     - sol.3: Learn an approximate maximizer
         - DDPG
             - design $Q$ so that, for a fixed state, it is quadratic in the action.
-            train another network $\mu_\theta(s)$ so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $y_j = r_j + \gamma Q_{\phi'}(s'_j, \mu_{\theta'}(s'_j))$
+            train another network $\mu_\theta(s)$ so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $$y_j = r_j + \gamma Q_{\phi'}\!\big(s'_j, \mu_{\theta'}(s'_j)\big)$$,
 
 ---
 
