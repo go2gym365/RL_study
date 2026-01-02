@@ -27,13 +27,13 @@
         2. Sample a batch $(s, a, s', r)$ from $B$
         3. Compute target value for each transition and Q-function update by batch per batch so that we can get lower variance
         - We can repeat step2, 3 K times but if the K is larger it will be more efficient. Or If the K is 1 and collect many datas that's the classic Deep Q-learning
-    - 리플라이버퍼에서는 버퍼 크기가 한정되어있어서 주기적으로 제거하는 방법도 있음 -> 링 버퍼로 전환. 
+    - Replay buffers have a limited size, so we sometimes evict old data periodically (e.g., by using a ring buffer)
 
 - **Polyak averaging**
     - uneven lag problem: When the target network is copied all at once at fixed intervals, he amount of lag vsries significantly. Right after an update, the lag is very small, while just before the next update, the lag can become vary large, which may make training unstable.
     - Soft update (Polyak Averaging): To solve htis issue, Polyak averaging updates the target network slightly and smoothly at every step
     - equation: $\phi' \leftarrow \tau \phi' + (1 - \tau)\phi$
-    - In this equation we usualy use large value하도 of $\tau$ like 0.999 to make target network update current network really slowly and stable
+    - In this equation we usualy use large value of $\tau$ like 0.999 to make target network update current network really slowly and stable
 - Overestimation problem in Q-learning
     - In the TD target ($y = r + \gamma \max_{a'} Q_{\phi'}(s',a')$), max choice the large noise value because max usually choice coincidently positive noise.
     - So overestimation problem cause because of action and value are from the same policy $Q_{\phi'}$
@@ -50,15 +50,15 @@
 - The problem in the continous space
     - In continuous action spaces, the hard part is the $\arg\max / \max$ over actions
     - sol.1: stochastic optimization
-        - Random sampling: sample N candidate actions , evaluate $Q(s,a)$ for each, and take the best one. Simple + parallelizable, but becomes inaccurate as action dimension grows
+        - Random sampling: sample $N$ candidate actions , evaluate $Q(s,a)$ for each, and take the best one. Simple + parallelizable, but becomes inaccurate as action dimension grows
         - CEM (Cross-entropy method): repeatedly sample actions, then refine the sampling distribution toward regions that produced high Q-values, and repeat (fast if you can parallelize and actions are low-dim)
         - CMA-ES: More sophisticated stochastic optimizer (like a fancier CEM); works reasonably well up to ~40D action spaces
     - sol.2: Use function class that is easy to optimize
         - NAF (Normalized Advantage Function) structure: design Q so that, for a fixed state, it is quadratic in the action.
     - sol.3: Learn an approximate maximizer
         - DDPG
-            - design Q so that, for a fixed state, it is quadratic in the action.
-            train another network \mu_\theta(s) so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $y_j = r_j + \gamma Q_{\phi'}\!\big(s'_j, \mu_{\theta'}(s'_j)\big)$,
+            - design $Q$ so that, for a fixed state, it is quadratic in the action.
+            train another network $\mu_\theta(s)$ so that $\mu_\theta(s)\approx \arg\max_{a} Q_{\phi}(s,a)$. Then compute targets using target networks: $$y_j = r_j + \gamma Q_{\phi'}\!\big(s'_j, \mu_{\theta'}(s'_j)\big)$$,
 
 ---
 
@@ -99,7 +99,7 @@ $$+\ \gamma^N \max_{a} Q_{\phi'}(s_{t+N}, a)$$
 ![Figure3](img/DDPG.png)
 1. Data collection and buffer storage: The agent takes an action a_i in the environment, observes the resulting transition $(s_i, a_i, s'_i, r_i)$, and stores this transition in the replay buffer $B$
 2. Mini-batch sampling: A mini-batch of transitions $(s_j, a_j, s'_j, r_j)$ is sampled uniformly at random from the replay buffer $B$
-3. Target value calculation: For each sampled transition, the target value is computed using the target networks: $y_j = r_j + \gamma Q_{\phi'}\bigl(s'_j, \mu_{\theta'}(s'_j)\bigr)$. Here, $Q_{\phi'}$ is the target Q-network and $\mu_{\theta'}$ is the target policy network. Using separate target networks helps mitigate the moving target problem and improves training stability
+3. Target value calculation: For each sampled transition, the target value is computed using the target networks: $$y_j = r_j + \gamma Q_{\phi'}\bigl(s'_j, \mu_{\theta'}(s'_j)\bigr)$. Here, $Q_{\phi'}$$ is the target Q-network and $\mu_{\theta'}$ is the target policy network. Using separate target networks helps mitigate the moving target problem and improves training stability
 4. Update critic: Perform a gradient update on the parameters $\phi$ of the current Q-network (the critic) by minimizing the error between the predicted Q-value and the target $y_j$
 5. Update actor: The parameters $\theta$ of the policy network (actor) are updated to maximize the Q-value
 ---
@@ -111,5 +111,5 @@ $$+\ \gamma^N \max_{a} Q_{\phi'}(s_{t+N}, a)$$
 
 ### 5.2 What I found later
 - Why the Q-learning update rule resembles gradient descent but is not actually true gradient descent
-    - In the target definition $y_i = r_i + \gamma \max_{a'} Q_\phi(s'_i, a')$ the Q-function Q_\phi itself appears inside the target. However, during the actual update, gradients are not backpropagated through the Q-function used in the target term. 
+    - In the target definition $$y_i = r_i + \gamma \max_{a'} Q_\phi(s'_i, a')$$ the Q-function Q_\phi itself appears inside the target. However, during the actual update, gradients are not backpropagated through the Q-function used in the target term. 
     - As a result, the chain rule is broken, and the update is not the gradient of any well-defined objective function.
