@@ -62,13 +62,13 @@
 - 그래서 $J(\theta')$가 얼마인지 직접 계산하는 것 대신 이미 알고있는 $A^{\pi_\theta}$를 새로운 정책 ($\pi_{\theta'}$)하에서 최대화하기만 하면 강화학습의 최종 목표($J$ 최대화)를 달성
 
 - Performance Difference Lemma
-$J(\theta')-J(\theta)=\mathbb{E}_{\tau\sim \pi_{\theta'}}\Big[\sum_{t=0}^\infty \gamma^t, A_{\pi_\theta}(s_t,a_t)\Big]$
+$$J(\theta')-J(\theta)=\mathbb{E}_{\tau\sim \pi_{\theta'}}\Big[\sum_{t=0}^\infty \gamma^t\, A_{\pi_\theta}(s_t,a_t)\Big]$$
 
 - Surrogate objective
-$\bar J(\theta')=\mathbb{E}_{s\sim p_\theta, a\sim \pi_\theta}\left[\frac{\pi_{\theta'}(a|s)}{\pi_\theta(a|s)}, A_{\pi_\theta}(s,a)\right]$
+$$\bar J(\theta')=\mathbb{E}_{s\sim p_\theta,\ a\sim \pi_\theta}\left[\frac{\pi_{\theta'}(a|s)}{\pi_\theta(a|s)}\, A_{\pi_\theta}(s,a)\right]$$
 
 - Fisher information matrix
-$F(\theta)=\mathbb{E}_{s\sim p_\theta, a\sim \pi_{\theta}}\left[\nabla_\theta \log \pi_\theta(a|s) \nabla_\theta \log \pi_\theta(a|s)^T\right]$
+$$F(\theta)=\mathbb{E}_{s\sim p_\theta,\ a\sim \pi_{\theta}}\left[\nabla_\theta \log \pi_\theta(a|s)\ \nabla_\theta \log \pi_\theta(a|s)^\top\right]$$
 
 - Natural gradient
 $\theta' = \theta + \alpha\, F(\theta)^{-1}\nabla_\theta J(\theta)$
