@@ -14,11 +14,11 @@
 ## 2. Key Concepts
 <!-- 중요한 용어 / 개념 리스트업 (정확한 정의가 아니어도 됨, 나중에 수정 가능) -->
 - **Policy gradient (PG) vs Policy iteration (PI)**   
-    – PG: 
+    – PG:
         1. advantage $\hat A^\pi$ 추정
         2. $\nabla_\theta \log \pi_\theta(a|s)\hat A$ 로 확률을 부드럽게 이동(soft improvement)
     - PI: 
-        1. policy evaluation으로 $V^\pi$ 또는 $Q^\pi$를 추정 → 
+        1. policy evaluation으로 $V^\pi$ 또는 $Q^\pi$를 추정
         2. greedy 개선 $\pi'=\arg\max_a Q^\pi(s,a)$
     - So both algorithm have same roof!
     - 두 알고리즘 모두 Advantage가 큰 action의 확률을 올리고 작은 action의 확률을 낮추는 개선을 반복한다
@@ -29,12 +29,15 @@
     - 하지만 이전 정책과 가깝게 만들기 위해 Total variation (TV)로 제한하는건 실제 정책 클래스에서 계산 및 최적화가 어렵다. 왜냐하면 TV는 매끈하지 않기 때문에 미분을 하지 못해서 다루기 불편함
     - TV대신 KL divergence로 제약을 걸자! 그리고 KL을 작게 만들면 TV도 작아진다.
     - KL trust region 안에서 surrogate를 최대화 -> TRPO/PPO
+- Performance difference Lemma
+    - 이전 정책의 advantage를 새 정책의 분포 아래에서 많이 얻을수록 성능이 오른다
 - Natural Gradient (Constrant using KL Divergence)
-    - valilla gradient ascent는 parameter space에서 L2 norm을 통해 선형화된 목적 함수를 푸는 것
+    - valilla gradient ascent는 parameter space에서 circular 제약 아래에서 최적 $\Delta\theta$ 를 고르는 것
     - 하지만 RL에서 필요한 건 parameter 변화량을 제어하는것이 아닌 정책 분포 변화량 (KL)을 제어하는 것
     - 파라미터마다 정책 확률에 미치는 민감도가 다르기 때문에 $\|\Delta\theta\|$ 작아도 KL이 커질 수 있음 → 불안정
-    - KL은 가정을 $\theta' = \theta$ 에서 하고, 두 정책이 완전히 같다면 차이는 0이고 최소값이다. 함수의 바닥이 매끄러운 평면 형태이기 때문에 기울기는 0이 나오게 된다.
-    - 따라서 
+    - KL은 가정을 $\theta' = \theta$ 에서 하고, 두 정책이 완전히 같다면 차이는 0이고 최소값이다. 이는 최소점이기 때문에 기울기는 0이 나오게 된다.
+    - 따라서 이를 1계 미분하게 되면 0이 나오기 때문에 곡률을 알기위해 2차 미분을 하고 근사를 통해 Fisher 행렬을 얻는다.
+    - Natural gradient equation ($\theta' = \theta + \alpha\, F(\theta)^{-1}\nabla_\theta J(\theta)$)에서 F의 역행렬을 곱해줘서 그라디언트를 올바르게 재스케일하여 정책이 너무 급격히 변하지 않도록 해준다
 
 ---
 
@@ -63,6 +66,12 @@ $$J(\theta')-J(\theta)=\mathbb{E}_{\tau\sim \pi_{\theta'}}\Big[\sum_{t=0}^\infty
 
 - Surrogate objective
 $$\bar J(\theta')=\mathbb{E}_{s\sim p_\theta,\, a\sim \pi_\theta}\left[\frac{\pi_{\theta'}(a|s)}{\pi_\theta(a|s)}\,A_{\pi_\theta}(s,a)\right]$$
+
+- Fisher information matrix
+$$F(\theta)=\mathbb{E}_{s\sim p_{\theta},\,a\sim \pi_{\theta}}\left[\nabla_\theta \log \pi_\theta(a|s)\ \nabla_\theta \log \pi_\theta(a|s)^\top\right]$$
+
+- Natural gradient
+$\theta' = \theta + \alpha\, F(\theta)^{-1}\nabla_\theta J(\theta)$
 ---
 
 ## 4. Main Logic / Algorithm Steps
@@ -99,7 +108,8 @@ $$\bar J(\theta')=\mathbb{E}_{s\sim p_\theta,\, a\sim \pi_\theta}\left[\frac{\pi
 - TV를 왜 KL로 바꿔도 되는지
 - What is KL?
 - 왜 2차 미분을 계산이 아닌 근사를 사용하는지?
-
+- 왜 목적함수는 1차 근사, 제약 조건은 2차 근사를 하는지?
+- 2차 근사를 하려면 어쨌든 2차 미분값을 알아야하는거 아닌지?
 
 ### 6.2 What I found later
 - 왜 expectation을 $p(s_0)$ 에서 $p_{\theta'}(\tau)$ 로 바꿔도 되는지
@@ -115,5 +125,12 @@ $$\bar J(\theta')=\mathbb{E}_{s\sim p_\theta,\, a\sim \pi_\theta}\left[\frac{\pi
 - 왜 2차 미분을 계산이 아닌 근사를 사용하는지?
     1. 원래의 식이 너무 복잡한 비선형 함수이기 대문에 이를 풀려면 수많은 반복 계산을 거쳐야 한다.
     2. 효율성: 근사를 하게되면 단 한번의 수식($\theta' = \theta + \alpha\, F(\theta)^{-1}\nabla_\theta J(\theta)$) 계산만에 업데이트를 끝낼 수 있음
-
---
+    3. 먼 거리를 근사하면 부정확하지만 가까운 거리에서는 매우 정확하다. 또한 KL 제약조건 ($\epsilon$)은 아주 작은 값이기 때문에 좁은 범위 안에서의 근사치는 실제 값과 거의 일치함
+    - 결론적으로 정확하지만 계산이 불가능한 방법 대신 약간의 오차는 있지만 효율적이고 성능향상이 보장되는 방법을 사용하는것이 현명하기 때문
+- 왜 목적함수는 1차 근사, 제약 조건은 2차 근사를 하는지?
+    - 목적함수: 1차 근사 (기울기) 만으로도 어느 방향으로 움직여야 점수가 높아지는지 충분히 알 수 있고 직선으로 만들면 최적화 문제가 훨씬 단순해짐
+    - 제약 조건: 기울기가 0이기 때문에 정책이 얼마나 변하는지 알 수가 없음. 그래서 2차 미분값 (Fisher)을 포함한 2차 근사를 통해 어느 방향이 더 민감한지 확인
+- 2차 근사를 하려면 어쨌든 2차 미분값을 알아야하는거 아닌지?
+    - $\theta' = \theta$ 지점에서 2차 미분한 결과가 수학적으로 Fisher information matrix와 정확히 일치함.
+    - 피셔 행렬 공식: $$F(\theta)=\mathbb{E}_{s\sim p_{\theta},\,a\sim \pi_{\theta}}\left[\nabla_\theta \log \pi_\theta(a|s)\ \nabla_\theta \log \pi_\theta(a|s)^\top\right]$$
+    - 새로운 미분 계산을 할 필요 없이, 이미 구한 1차 미분값들을 서로 곱해서 평균 (기댓값)만 내면 바로 2차 근사에 필요한 가중치 (Fisher information matrix)를 구할 수 있음
