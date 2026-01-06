@@ -142,7 +142,12 @@ def run_training_loop(params):
                 # TODO: relabel collected obsevations (from our policy) with labels from expert policy
                 # HINT: query the policy (using the get_action function) with paths[i]["observation"]
                 # and replace paths[i]["action"] with these expert labels
-                paths = TODO
+                for path in paths:
+                    observations = path["observation"]
+                    expert_actions = expert_policy.get_action(observations)
+                    path["action"] = expert_actions
+                # paths = TODO
+
 
         total_envsteps += envsteps_this_batch
         # add collected data to replay buffer
@@ -153,16 +158,28 @@ def run_training_loop(params):
         training_logs = []
         for _ in range(params['num_agent_train_steps_per_iter']):
 
-          # TODO: sample some data from replay_buffer
-          # HINT1: how much data = params['train_batch_size']
-          # HINT2: use np.random.permutation to sample random indices
-          # HINT3: return corresponding data points from each array (i.e., not different indices from each array)
-          # for imitation learning, we only need observations and actions.  
-          ob_batch, ac_batch = TODO
+            # TODO: sample some data from replay_buffer
+            # HINT1: how much data = params['train_batch_size']
+            # HINT2: use np.random.permutation to sample random indices
+            # HINT3: return corresponding data points from each array (i.e., not different indices from each array)
+            # for imitation learning, we only need observations and actions.  
+            #   ob_batch, ac_batch = TODO
+            # print(replay_buffer.obs[0])
+            # print(params['train_batch_size'])
+            total_datas = replay_buffer.obs.shape[0]
+            # print(total_datas)
+            batch_size = params['train_batch_size']
+            # print("batch size:", batch_size)
+            idx = np.random.permutation(total_datas)[:batch_size]
+            # print(N)
+            ob_batch = replay_buffer.obs[idx]
+            ac_batch = replay_buffer.acs[idx]
+            # print("check pairing:", np.allclose(replay_buffer.obs[N[0]], ob_batch[0]))
 
-          # use the sampled data to train an agent
-          train_log = actor.update(ob_batch, ac_batch)
-          training_logs.append(train_log)
+
+            # use the sampled data to train an agent
+            train_log = actor.update(ob_batch, ac_batch)
+            training_logs.append(train_log)
 
         # log/save
         print('\nBeginning logging procedure...')

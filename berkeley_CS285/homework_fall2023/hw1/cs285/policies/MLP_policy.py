@@ -110,6 +110,19 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             self.learning_rate
         )
 
+    def get_action(self, obs: np.ndarray) -> np.ndarray:
+        if len(obs.shape) > 1:
+            observation = obs
+        else:
+            observation = obs[None, :]
+
+        observation = ptu.from_numpy(observation.astype(np.float32))
+        dist = self.forward(observation)
+
+        # 보통 BC/DAgger에서는 mean을 쓰거나 sample을 씀
+        action = dist.mean  # 또는 dist.sample()
+        return ptu.to_numpy(action)
+
     def save(self, filepath):
         """
         :param filepath: path to save MLP
@@ -129,7 +142,10 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # through it. For example, you can return a torch.FloatTensor. You can also
         # return more flexible objects, such as a
         # `torch.distributions.Distribution` object. It's up to you!
-        raise NotImplementedError
+        mean = self.mean_net(observation)
+        scale_dist = torch.exp(self.logstd)
+        dist = distributions.Normal(mean, scale_dist)
+        return dist
 
     def update(self, observations, actions):
         """
@@ -141,7 +157,18 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             dict: 'Training Loss': supervised learning loss
         """
         # TODO: update the policy and return the loss
-        loss = TODO
+        observations = ptu.from_numpy(observations)
+        actions = ptu.from_numpy(actions)
+        
+        dist = self.forward(observations)
+
+        log_probs = dist.log_prob(actions).sum(dim=-1)
+        loss = -log_probs.mean()
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
         return {
             # You can add extra logging information here, but keep this line
             'Training Loss': ptu.to_numpy(loss),

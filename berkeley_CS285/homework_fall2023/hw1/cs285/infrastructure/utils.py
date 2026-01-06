@@ -4,6 +4,11 @@ Some miscellaneous utility functions
 Functions to edit:
     1. sample_trajectory
 """
+import gym
+from cs285.infrastructure import utils
+from cs285.policies.loaded_gaussian_policy import LoadedGaussianPolicy
+from cs285.infrastructure import pytorch_util as ptu
+
 
 from collections import OrderedDict
 import cv2
@@ -17,7 +22,12 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     """Sample a rollout in the environment from a policy."""
     
     # initialize env for the beginning of a new rollout
-    ob =  env.reset() # TODO: initial observation after resetting the env
+    # print("env: ", env)
+    # print("env.reset: ", env.reset())
+    ob =  env.reset() # TODO: initial observation after resetting the env 환경을 초기 상태로 리셋한 후 초기 관측값임
+    print("ob:", ob.shape)
+    # ob = ob_reset[0]
+    # print("ob_reset:", ob_reset)
 
     # init vars
     obs, acs, rewards, next_obs, terminals, image_obs = [], [], [], [], [], []
@@ -33,15 +43,16 @@ def sample_trajectory(env, policy, max_path_length, render=False):
             image_obs.append(cv2.resize(img, dsize=(250, 250), interpolation=cv2.INTER_CUBIC))
     
         # TODO use the most recent ob to decide what to do
-        ac = TODO # HINT: this is a numpy array
+        ac = policy.get_action(ob) # HINT: this is a numpy array
         ac = ac[0]
 
         # TODO: take that action and get reward and next ob
-        next_ob, rew, done, _ = TODO
-        
+        # print("env: ", env)
+        next_ob, rew, done, _ = env.step(ac)
+        # print("done", done)
         # TODO rollout can end due to done, or due to max_path_length
         steps += 1
-        rollout_done = TODO # HINT: this is either 0 or 1
+        rollout_done = done or steps >= max_path_length # HINT: this is either 0 or 1
         
         # record result of taking that action
         obs.append(ob)
@@ -151,3 +162,21 @@ def compute_metrics(paths, eval_paths):
 
 def get_pathlength(path):
     return len(path["reward"])
+
+
+def main():
+    env = gym.make("Ant-v4")
+    policy = LoadedGaussianPolicy("../policies/experts/Ant.pkl")
+    policy.to(ptu.device)
+
+    path = utils.sample_trajectory(env, policy, max_path_length=10, render=False)
+
+    print(type(path), path.keys())
+    print("obs", path["observation"].shape, path["observation"].dtype)
+    print("acs", path["action"].shape, path["action"].dtype)
+    print("rew", path["reward"].shape, path["reward"].dtype)
+    print("next_obs", path["next_observation"].shape, path["next_observation"].dtype)
+    print("term", path["terminal"].shape, path["terminal"][-1])
+
+if __name__ == "__main__":
+    main()
