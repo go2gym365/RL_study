@@ -162,8 +162,7 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         
         dist = self.forward(observations)
 
-        log_probs = dist.log_prob(actions).sum(dim=-1)
-        loss = -log_probs.mean()
+        loss = -dist.log_prob(actions).sum(dim=-1).mean()
 
         self.optimizer.zero_grad()
         loss.backward()
