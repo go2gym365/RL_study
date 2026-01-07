@@ -25,7 +25,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     # print("env: ", env)
     # print("env.reset: ", env.reset())
     ob =  env.reset() # TODO: initial observation after resetting the env 환경을 초기 상태로 리셋한 후 초기 관측값임
-    print("ob:", ob.shape)
+    # print("ob:", ob.shape)
     # ob = ob_reset[0]
     # print("ob_reset:", ob_reset)
 
@@ -152,6 +152,8 @@ def compute_metrics(paths, eval_paths):
     logs["Train_MaxReturn"] = np.max(train_returns)
     logs["Train_MinReturn"] = np.min(train_returns)
     logs["Train_AverageEpLen"] = np.mean(train_ep_lens)
+
+    logs["Performance"] = np.mean(eval_returns) / np.mean(train_returns)
 
     return logs
 

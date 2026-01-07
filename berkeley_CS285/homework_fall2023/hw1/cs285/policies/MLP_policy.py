@@ -142,12 +142,13 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # through it. For example, you can return a torch.FloatTensor. You can also
         # return more flexible objects, such as a
         # `torch.distributions.Distribution` object. It's up to you!
-        mean = self.mean_net(observation)
-        scale_dist = torch.exp(self.logstd)
-        dist = distributions.Normal(mean, scale_dist)
-        return dist
+        # 관측을 넣으면 정책을 반환하는 함수
+        mean = self.mean_net(observation) # mean_net: multi layer perceptron
+        scale_dist = torch.exp(self.logstd) # 표준편차의 로그를 학습하기 때문에 지수화 항상 양수 나옴 
+        dist = distributions.Normal(mean, scale_dist) # 정규분포를 나타내는 클래스
+        return dist # 확률분포 객체를 반환. 
 
-    def update(self, observations, actions):
+    def update(self, observations, actions): # 관측 s가 들어오면 정책이 expert action을 잘 내도록 학습. maximum likelihood
         """
         Updates/trains the policy
 
@@ -157,16 +158,17 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
             dict: 'Training Loss': supervised learning loss
         """
         # TODO: update the policy and return the loss
-        observations = ptu.from_numpy(observations)
+        observations = ptu.from_numpy(observations) # numpy 배열을 pytorch 텐서로 변환 + GPU 사용시 to(device)도 자동으로 처리됨
         actions = ptu.from_numpy(actions)
         
-        dist = self.forward(observations)
+        dist = self.forward(observations) # 관측 배치에 대한 정책 분포를 얻음
 
-        loss = -dist.log_prob(actions).sum(dim=-1).mean()
-
-        self.optimizer.zero_grad()
-        loss.backward()
-        self.optimizer.step()
+        loss = -dist.log_prob(actions).sum(dim=-1).mean() # 음의 로그 확률 밀도 함수 값을 계산하여 손실을 구함. sum(dim=-1): 각 샘플에 대한 로그 확률을 합산, mean(): 배치 전체에 대한 평균 손실 계산
+                                                          # optimizer는 기본적으로 loss를 최소화 하려고 하기 때문에 음수 부호를 붙여줌으로써 최대우도 로직으로 변환
+                                                          # sum(dim=-1) 연속 행동이 여러 차원일 때, 행동 전체의 확률을 계산하려면 각 차원의 log확률을 더해야함
+        self.optimizer.zero_grad() # 이전 배치에서 쌓인 그라디언트 초기화
+        loss.backward() # loss를 기준으로 mean_net과 logstd에 대한 gred 계산
+        self.optimizer.step() 
 
         return {
             # You can add extra logging information here, but keep this line
