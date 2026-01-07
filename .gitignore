@@ -2,3 +2,46 @@
 **/.DS_Store
 __pycache__/
 **/__pycache__/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# ===== OS / Editor =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===== Environments =====
+venv/
+.venv/
+env/
+conda/
+*.egg-info/
+
+# ===== Logs / Runs =====
+logs/
+runs/
+wandb/
+tensorboard/
+*.log
+
+# ===== RL / CS285 outputs =====
+data/
+videos/
+*.mp4
+
+# ===== Models / checkpoints / large binaries =====
+*.pt
+*.pth
+*.ckpt
+*.pkl
+*.npz
+
+# ===== Temp =====
+tmp/
+temp/
