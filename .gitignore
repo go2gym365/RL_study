@@ -1,20 +1,13 @@
-.DS_Store
-**/.DS_Store
-__pycache__/
-**/__pycache__/
-
-# ===== Python =====
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.ipynb_checkpoints/
-
 # ===== OS / Editor =====
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
 
 # ===== Environments =====
 venv/
