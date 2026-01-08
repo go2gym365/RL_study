@@ -9,7 +9,7 @@
 
 ## Part 1
 - Limitation → Fix<!--이전 파트 한계 → 이번 파트 해결책-->
-    - We train the model $f$ on data collected by a base policy $\pi_0$ on the state distribution $p_{\pi_0}(s_t)$. But when we plan through the model, the plan is executing another policy $\pi_f$ which has its own state distribution $p_{\pi_f}(s_t)$. Since $p_{\pi_f}(s_t) \neq p_{\pi_0}(s_t)$, we experience distributional shit and the model makes wrong predictions and the err will be compounding in the rollouts
+    - We train the model $f$ on data collected by a base policy $\pi_0$ on the state distribution $p_{\pi_0}(s_t)$. But when we plan through the model, the plan is executing another policy $\pi_f$ which has its own state distribution $p_{\pi_f}(s_t)$. Since $p_{\pi_f}(s_t) \neq p_{\pi_0}(s_t)$, we experience distributional shift and the model makes wrong predictions and the error will be compounding in the rollouts
     - Fix
         1. ver 1.0 (DAgger for model): excuting $\pi_f$ from model, keep collecting state-transfer tuple data. Mitigate the distributional shift with expanding the dataset to distribution of $\pi_f$
         2. ver 1.5 (MPC): Instead of executing an long plan at once, replanning each time steps. Observe the real next state, and plan again immediately.
@@ -17,7 +17,7 @@
     - The reason that the problem happens is because $p_{\pi_f}(s_t)$ is not equal to $p_{\pi_0}(s_t)$, so we are experiencing distributional shift
 - Flow of this part <!--(어떤 흐름으로 강의가 진행되는지)-->
     1. the most obvious model-based RL prototype: random exploration → supervised model learning → planning
-    2. planning with model is like executing with another policy, it makes a different state distribution than the data collection policy $\pi_0$. Since $p_{\pi_f}(s_t)\neq p_{\pi_0}(s_t)$, we get distributional shift, and model errors leading to error compounding eover rollouts.
+    2. planning with model is like executing with another policy, it makes a different state distribution than the data collection policy $\pi_0$. Since $p_{\pi_f}(s_t)\neq p_{\pi_0}(s_t)$, we get distributional shift, and model errors leading to error compounding over rollouts.
     3. DAgger for models to fix distributional shift: execute those actions in the real environment, add the resulting transitions to the dataset, retrain the model on all data and repeat these steps. It mitigates distributional shift in principle
     4. From the DAgger, when you keep doing an open-loop sequence of actions, even a small model error can accumulate. When you realize you made a mistake it might be too late
     5. MPC: plan a sequence but execute only the first planned action, observe the real next state and re-plan immediately. Replanning makes the procedure uch more robust to model errors, thought it is considerable more computationally expensive
@@ -66,11 +66,11 @@ $p(s_{t+1}\mid s_t,a_t,\mathcal D) \;=\; \int p(s_{t+1}\mid s_t,a_t,\theta)\, p(
 ## Part 4
 - Limitation → Fix<!--이전 파트 한계 → 이번 파트 해결책-->
     - Before: Planning is the problem to solve optimizing the sum from $t=1$ to $H$ of the reward
-    - Now: We have N possible models. so Choose a sequence of actions through $a_H$ that maximizes the reward on average over all the models
+    - Now: We have $N$ possible models. So choose a sequence of actions through $a_H$ that maximizes the reward on average over all the models
 - Flow of this part <!--(어떤 흐름으로 강의가 진행되는지)-->
     1. Which problem the single-model planning solve?
     2. If you change to ensemble posterior, objective change
-    3. Evaluate candidate action sequence using Moete carlo
+    3. Evaluate candidate action sequence using Monte carlo
 - Terminology Map <!--(용어 등치/정의)-->
     - Posterior (사후 분포)
         - prior: 데이터를 보기전에 $\theta$ 가 이럴 것 같다라는 믿음
