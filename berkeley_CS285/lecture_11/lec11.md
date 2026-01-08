@@ -119,7 +119,9 @@ $p(s_{t+1}\mid s_t,a_t,\mathcal D) \;=\; \int p(s_{t+1}\mid s_t,a_t,\theta)\, p(
         - single-step encoder: $q_\psi(s_t\mid o_t)$
             - Simplest but least accurate
             - Use single-step when u pretty much guess the state from the current observation
+    - POMDP
+        - You can't fully infer the environment's true state $s_t$ from the current observation $o_t$ alone
 - Why it matters <!--(왜 중요한가 1~2줄) 이걸 놓치면 다음 파트가 왜 나오는지 이해가 안 됨-->
-    - 
+    - On the image, just predicting next frame can be unstable easily because of the POMDP
 - Anchor equation/diagram <!--(있으면 1개): 이 파트의 핵심 수식/도식 이름만-->
     - Deterministic encoder substitution: $s_t = g_\psi(o_t)$
