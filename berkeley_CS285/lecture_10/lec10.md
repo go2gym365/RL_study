@@ -1,5 +1,5 @@
 ## 0. Meta
-- Course: CS 285, Reinforcement Learning
+- Course: CS285, Deep Reinforcement Learning
 - Date: 2026.01.05
 - Lecturer: Sergey Levine
 - Source/Link: https://www.youtube.com/watch?v=4SL0DnxC1GM&list=PL_iWQOsE6TfVYGEGiAOMaOzzv41Jfm_Ps&index=40

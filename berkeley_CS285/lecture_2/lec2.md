@@ -1,7 +1,7 @@
 
 
  ## 0. Meta
-- Course: CS285 RL
+- Course: CS285, Deep Reinforcement Learning
 - Date: 25.12.07
 - Lecturer: Sergey Levine
 - Source/Link:  https://www.youtube.com/watch?v=awfrsjYnJmw&list=PL_iWQOsE6TfVYGEGiAOMaOzzv41Jfm_Ps&index=8&pp=iAQB
@@ -62,9 +62,7 @@ DAgger
 <!-- 강의 들을 때 헷갈린 것들 + 나중에 찾아보고 이해한 내용 -->
 ### 6.1 What I didn’t understand (at first)
 1. lots of researchers and students of RL are usually confusing State and Observation.
-
 2. Behavioral cloning
-
 3. How the error probability will increase untill $T^2$
 
 ### 6.2 What I found later

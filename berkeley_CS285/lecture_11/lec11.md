@@ -1,11 +1,8 @@
 ## 0. Meta
-- Course: CS 285, Reinforcement Learning
+- Course: CS285, Deep Reinforcement Learning
 - Date: 2026.01.07
 - Lecturer: Sergey Levine
-- Source/Link:  <!-- 유튜브 링크, 슬라이드 링크 등 -->
-
-## 1. Logical Flow (강의 파트별 논리 전개)
-<!--각 파트가 이전 파트의 어떤 '한계'를 지적하고 '해결책'을 제시하는지 한 줄로 요약하며 정리-->
+- Source/Link: https://www.youtube.com/watch?v=LkTmiylbHYk&list=PL_iWQOsE6TfVYGEGiAOMaOzzv41Jfm_Ps&index=45
 
 ## Part 1
 - Limitation → Fix<!--이전 파트 한계 → 이번 파트 해결책-->
@@ -93,7 +90,7 @@ $p(s_{t+1}\mid s_t,a_t,\mathcal D) \;=\; \int p(s_{t+1}\mid s_t,a_t,\theta)\, p(
 - Professor’s Emphasis <!--(핵심 한 줄): 강의에서 교수님이 ‘딱 박아준’ 문장-->
     - We typically deal with a POMDP, we know the observations and actions, but we do not know the states
     - latent model needs expected log likelihood + approximate posterior
-- Flow of this part <!--(어떤 흐름으로 강의가 진행되는지)-->
+- Flow of this part - Flow of this part <!--(어떤 흐름으로 강의가 진행되는지, 강의의 흐름을 반영하는건 맞지만 어떻게 알고리즘을 발전해나가는지 정리)-->
     1. Why use only image is hard: image has high dimention+redundance+POMDP. So it's really hard to know real state $s_t$ from single observation $o_t$
     2. POMDP
         - we only have $o_t$, $a_t$ and also there's hidden state $s_t$
