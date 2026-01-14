@@ -90,13 +90,6 @@
             - 다음 상태 $s_i$는 데이터에 있으니 그대로 쓰고, 그 다음 행동은 데이터의 $a_i$가 아니라 "현재 우리가 학습중인 정책 $\pi$가 고를 행동"을 넣음
             - 우리가 estimate 하려는건 현재 정책 $\pi$의 Bellman backup이니까 타깃이 $r_i + \gamma Q(s'_i, \pi(s'_i))$ 형태로 들어가야 policy evaluation + improvement 루프가 가능
 
-- Terminology Map <!--(용어 등치/정의)-->
-    - 
-- Why it matters <!--(왜 중요한가 1~2줄) 이걸 놓치면 다음 파트가 왜 나오는지 이해가 안 됨-->
-    - 
-- Anchor equation/diagram <!--(있으면 1개): 이 파트의 핵심 수식/도식 이름만-->
-    - 
-
 ## My Confusion & Clarification <!--(질문과 해결)-->
 - Q. 왜 policy evaluation + improvement 루프가 가능하려면 $r_i + \gamma Q(s'_i, \pi(s'_i))$ 왜 이런 형태로 들어가야하는지?
 - A.
