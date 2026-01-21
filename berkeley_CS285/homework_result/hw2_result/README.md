@@ -53,3 +53,12 @@
     - Although variance is high, the large batch size in this environment makes learning effective
 
 - As $\lambda$ increases, learning becomes significantly more stable and achieves higher final performance. Small $\lambda$ values (e.g., $\lambda$ = 0 or 0.95) rely heavily on short-horizon TD errors and suffer from high variance, leading to unstable or failed learning. In contrast, larger $\lambda$ values ($\lambda$ = 0.98, 0.99, and 1.0) effectively incorporate longer-term return information, resulting in smoother learning curves and substantially higher average returns. The best performance is achieved with $\lambda$ = 1.0, which closely resembles Monte Carlo returns and reaches an average score 221
+
+## Experiment 4
+<p align="center">
+  <img src="experiment_4/experiment4_envsteps.png" width="90%" />
+</p>
+
+### Analysis
+- Compared to default setting (batch size 5000), tuning the batch size and lr improves sample efficiency, allowing the policy to achieve high returns in fewer environments steps. The tuned with GAE ($\lambda=0.95$) performs best, reaching high performance the fastest and showing he most stable learning across seeds
+- It shows that importance of both hyperparameter tuning and variance reduction for sample-efficient policy gradient learning
