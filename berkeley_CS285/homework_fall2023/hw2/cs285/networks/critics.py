@@ -46,7 +46,7 @@ class ValueCritic(nn.Module):
         # TODO: update the critic using the observations and q_values
         q_values = q_values.squeeze(-1)
         values = self.forward(obs)
-        loss == ((values - q_values) ** 2).mean()
+        loss = ((values - q_values) ** 2).mean()
 
         self.optimizer.zero_grad()
         loss.backward()
