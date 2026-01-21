@@ -34,6 +34,16 @@ def sample_trajectory(
 
         if isinstance(env.action_space, gym.spaces.Discrete):
             ac = int(np.squeeze(ac))
+        else:
+            # Box action: (act_dim,)로 맞추고 clip
+            ac = np.squeeze(ac).astype(np.float32)
+
+            # (act_dim,)이 아니면 강제로 reshape
+            if ac.shape != env.action_space.shape:
+                ac = ac.reshape(env.action_space.shape)
+
+            # action 범위 클리핑 (MuJoCo에 안전)
+            ac = np.clip(ac, env.action_space.low, env.action_space.high)
 
         # TODO: use that action to take a step in the environment
 

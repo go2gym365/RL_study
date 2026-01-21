@@ -107,9 +107,9 @@ class MLPPolicyPG(MLPPolicy):
 
         # TODO: implement the policy gradient actor update.
         if self.discrete:
-            actions = torch.as_tensor(actions, device=ptu.device)
+            actions = actions.long().squeeze(-1)
         else:
-            actions = ptu.from_numpy(actions)
+            actions = actions.float()
 
         dist = self.forward(obs)
         log_probs = dist.log_prob(actions)
