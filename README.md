@@ -8,21 +8,17 @@ This repository documents my continuous study journey in RL —  including readi
 ## 📁 Repository Structure
 
 This repository will include:
-
-- **Paper Summaries** (organized per folder)
-- **Key Ideas & Insights**
-- **Pseudo-code / Mathematical Derivations**
-- **Selected CS285 Assignments**
-- **Implementation Notes**
-- **Additional learning materials**
+- Berkeley CS285 Lectures & Assignments  
+- Paper Summaries  
+- Key Ideas & Insights  
+- Implementation Notes  
+- Ongoing Study Materials  
 
 ---
 
 ## 🎯 Study Focus
 
 I am currently interested in the following research directions:
-
-
 
 ### 🔹 **1. World Models**
 - Learning latent dynamics of environments  
@@ -51,15 +47,12 @@ toward building robust and general-purpose control agents.
 
 - To deeply understand and implement core RL algorithms  
 - To systematically summarize papers on world models, and action planning  
-- To build a foundation for future research in robot learning, planning agents,  
-  and generative control systems  
+- To build a foundation for future research in robot learning, planning agents, and generative control systems  
 
 ---
 
 ## 🛠 Tools & Environment
-
 - Python / PyTorch  
-- NumPy / Matplotlib  
 - VS Code + GitHub  
 
 ---
