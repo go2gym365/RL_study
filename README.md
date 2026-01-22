@@ -53,7 +53,8 @@ toward building robust and general-purpose control agents.
 
 ## 🛠 Tools & Environment
 - Python / PyTorch  
-- VS Code + GitHub  
+- VS Code + GitHub
+- LaTeX  
 
 ---
 
