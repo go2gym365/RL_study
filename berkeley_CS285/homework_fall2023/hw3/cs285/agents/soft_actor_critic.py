@@ -7,7 +7,12 @@ import numpy as np
 
 import cs285.infrastructure.pytorch_util as ptu
 
-
+'''
+SAC
+1. critic update: 벨만백업
+2. actor update: Q+entropy 최대화
+3. 타겟크리틱 업데이트
+'''
 class SoftActorCritic(nn.Module):
     def __init__(
         self,
